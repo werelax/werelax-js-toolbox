@@ -69,33 +69,3 @@
   exports['Class'] = Module;
   
 })(Wrlx || (this.Wrlx = {}));
-
-/**
-
-var Jarl = fm.Module.create({
-    init: function() {
-        print("JARL!");
-    },
-    somevalue: "yeah!",
-    othervalue: "jarl",
-    somemethod: function (v) {
-        print("somevalue: " + this.somevalue);
-    }
-});
-
-var Yorl = Jarl.create({
-    init: function() {
-        print("YORL!");
-        this.super('init');
-    },
-    somemethod: function (v) {
-        print("Yorl#somemethod!<br>");
-        this.super('somemethod');
-    }
-});
-
-
-var j = new Yorl();
-j.somemethod();
-
-**/
