@@ -74,3 +74,58 @@ MyClass.extend(StaticModule);
 MyClass.say_hi();
 
 ```
+
+### Templates.js
+
+If you work with javascript long enough, sooner or later you will need to generate some HTML from your code. If you want something fast, tested and robust, look for something else. This micro-library is very simple (about 20 loc), extremely small and a sourprisingly powerful. Can be handy for some quick hacks, as a base for your own template engine or if you are trying to reduce the size of your page.
+
+The idea behind `Templates.js` comes from John Resig's micro-template engine. I just can't understand his implementation (Johnny is way beyond my league), so I did it my way.
+
+Using the library is very, very easy: `var the_compiled_template = Wrlx.Template("the template string");`. And then just call `the_compiled_tempalte` with the locals in a literal object. Writing the templates as javascript's strings is really awkward, so I recommend you to write it inside a `<script type="text/template">` tag and use `Wrlx.Template.by_id('script-tag-id')`. A more detailed example:
+
+First, add something like this to the HTML of the page (you can put it wherever you prefer):
+
+```html
+
+<script type="text/template" id="table-template">
+  <table>
+    <tr>
+      <th> English </th>
+      <th> Spanish </th>
+    </tr>
+    <% for (var thing in list) { %>
+      <tr>
+        <td> <%= thing       %>  </td> 
+        <td> <%= list[thing] %>  </td> 
+      </tr>
+    <% } %>
+  </table>
+</script>
+
+```
+
+And then you can do something like the following:
+
+```javascript
+
+var T = { 
+  // literal string... too ugly!
+  list: Wrlx.Template(
+    '<ul> \
+      <% for (var i=0,_len=items.length; i<_len; i++) { %> \
+        <li> <%= items[i] %> </li> \
+      <% } %> \
+    </ul>'),
+  // inside a script tag
+  table: Wrlx.Template.by_id('table-template')
+};
+
+window.onload = function() {
+  test_output = document.getElementById('output');
+   test_output.innerHTML = T['list']({items: [1,2,3,4,5]});
+   test_output.innerHTML += T['table']({list: {one: "uno", two: "dos", three: "tres"}});
+}
+
+```
+
+
