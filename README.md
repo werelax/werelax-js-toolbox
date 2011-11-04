@@ -77,7 +77,7 @@ MyClass.say_hi();
 
 ### Templates.js
 
-If you work with javascript long enough, sooner or later you will need to generate some HTML from your code. If you want something fast, tested and robust, look for something else. This micro-library is very simple (about 20 loc), extremely small and a sourprisingly powerful. Can be handy for some quick hacks, as a base for your own template engine or if you are trying to reduce the size of your page.
+If you work with javascript long enough, sooner or later you will need to generate some HTML from your code. If you want something fast, tested and robust, look for something else. This micro-library is very simple (about 20 loc), extremely small and a surprisingly powerful. Can be handy for some quick hacks, as a base for your own template engine or if you are trying to reduce the size of your page.
 
 The idea behind `Templates.js` comes from John Resig's micro-template engine. I just can't understand his implementation (Johnny is way beyond my league), so I did it my way.
 
