@@ -81,7 +81,7 @@ If you work with javascript long enough, sooner or later you will need to genera
 
 The idea behind `Templates.js` comes from John Resig's micro-template engine. I just can't understand his implementation (Johnny is way beyond my league), so I did it my way.
 
-Using the library is very, very easy: `var the_compiled_template = Wrlx.Template("the template string");`. And then just call `the_compiled_tempalte` with the locals in a literal object. Writing the templates as javascript's strings is really awkward, so I recommend you to write it inside a `<script type="text/template">` tag and use `Wrlx.Template.by_id('script-tag-id')`. A more detailed example:
+Using the library is very, very easy: `var the_compiled_template = Wrlx.Template("the template string");`. And then just call `the_compiled_tempalte` with the locals in a literal object. Writing the templates as javascript's strings is really akward, so I recommend you to write it inside a `<script type="text/template">` tag and use `Wrlx.Template.by_id('script-tag-id')`. A more detailed example:
 
 First, add something like this to the HTML of the page (you can put it wherever you prefer):
 
@@ -122,8 +122,8 @@ var T = {
 
 window.onload = function() {
   test_output = document.getElementById('output');
-   test_output.innerHTML = T['list']({items: [1,2,3,4,5]});
-   test_output.innerHTML += T['table']({list: {one: "uno", two: "dos", three: "tres"}});
+  test_output.innerHTML = T['list']({items: [1,2,3,4,5]});
+  test_output.innerHTML += T['table']({list: {one: "uno", two: "dos", three: "tres"}});
 }
 
 ```
