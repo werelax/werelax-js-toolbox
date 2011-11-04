@@ -37,7 +37,7 @@ var ChildClass = BaseClass.create({
 var a = new BaseClass;
 a.somemethod();
 
-car b = new ChildClass;
+var b = new ChildClass;
 b.somemethod();
 
 ```

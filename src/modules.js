@@ -19,7 +19,7 @@
   Module.extend = function (obj) {
     if (!obj) { throw new Error('extend(obj) requires obj'); }
     for (var key in obj) if (obj.hasOwnProperty(key) && !(key in reserved_keywords)) {
-      this[key] == obj[key];
+      this[key] = obj[key];
     }
     if (typeof obj.extended === 'function') {
       obj.extended.apply(this);
