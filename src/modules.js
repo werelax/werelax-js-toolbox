@@ -68,4 +68,4 @@
 
   exports['Class'] = Module;
   
-})(Wrlx || (this.Wrlx = {}));
+})(this.Wrlx || (this.Wrlx = {}));

@@ -18,8 +18,8 @@
     } else {
       throw new Error("LousyTemplate: Not element found with id '" + id + "'");
     }
-
-    exports['Template'] = LousyTemplate;
   };
 
-})(Wrlx || (this.Wrlx = {}));
+  exports['Template'] = LousyTemp;
+
+})(this.Wrlx || (this.Wrlx = {}));
