@@ -262,3 +262,42 @@ window.onload = function() {
   TestView.init();
 };
 ```
+
+### Events.js
+
+This one is the cousin of `Elements.js`. I said that I hate when half my code is just for finding DOM nodes inside templates. Well, I feel the same way about the event-bidning code. It would be great I could get rid of both. And in the same line, with the same spirit, and also inspired (kind of) by `Knockout.js`, lets see a very similar example with `Events.js`:
+
+The HTML:
+
+```html
+<div id="container">
+  <label> Type something here: </label>
+  <input type="text" data-el="input.text" data-event="keyup: update_header"/>
+  <a href="#" data-event="click: reset"> reset </a>
+  <h2 data-el="header"></h2> 
+</div>
+```
+
+The JavaScript:
+
+```javascript
+var TestController = {
+  init: function () {
+    this.ui = Wrlx.Elements('#container')
+    Wrlx.Events(this, '#container');
+  },
+  update_header: function () {
+    this.ui.header.innerHTML = this.ui.input.text.value;
+  },
+  reset: function () {
+    this.ui.input.text.value = "";
+    this.update_header();
+  }
+}
+
+window.onload = function() {
+  TestController.init();
+};
+```
+
+How cool is that? Very little noise in the controller, just the code that matters. All this `data-*` thing is quite controversial. It is OK to specify the bindings in the HTML? Maybe is a violation of the view-controller decoupling. But, as far as I can tell, they are also coupled when you fill you controller with `var thing = $('.my-thing-selector')` and `$(thing).click(function() { ... })`. You can choose between two approaches: make the controller completely dependant on the CSS structure of the view by filling it with jQuery selectors/bindings, or make the view completely dependant on the controller method names by specifying the bindings in the `data-event` attribute. I find the second approach cleaner and better (relying on css selectos is hardly a good idea). That's my two cents.
