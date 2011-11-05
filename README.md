@@ -128,4 +128,98 @@ window.onload = function() {
 
 ```
 
+### StateMachine.js
 
+UI interactions can become pretty complex (they usually do), and the simple and nice js logic that you write for the alpha version of the app quickly grows into a wild spaguetti monster full of intrincate conditional hiding or showing of elements, binding and unbinding of events when the user opens these or that panel, disabling the checkboxes if the form is empty, etc, ... A nightmare. One fine solution for some of these chaotic UIs is aproaching to them as finite state machines, to divide the messy jungle of callbacks into isolated, well defined states and explicit transitions.
+
+My implementation of the finite state machine abstraction is quite opinionated. I've seen some people writing state machines based on events and the PubSub pattern. I don't like it. I don't see the need for something as anarchic as that. I've tried to keep it simple and organized and make the state transitions explicit.
+
+One point I don't really like about this library: there is no clear way for one state to behave different depending of the origin of the transition. I mean: If the SM goes to the state A, it will call A.activate(), and it doesn't care if the transition was B->A or C->A. I'm still not sure if this is important, or how to do it cleanly.
+
+Anyway, let's see an (admitely too long) example of `StateMachine.js`:
+
+First, in the HTML:
+
+```html
+<div id="state-1">
+  <h2> State 1 </h2>
+  <a href="#" class="button"> Go To State2 </a>
+</div>
+
+<div id="state-2" style="display:none">
+  <h2> State 2 </h2>
+  <a href="#" class="button"> Go To State3 </a>
+</div>
+
+<div id="state-3" style="display:none">
+  <h2> State 3 </h2>
+  <a href="#" class="button"> Go To State1 </a>
+</div>
+```
+
+And the JS:
+
+```javascript
+var S1Controller = {
+  init: function() {
+    var self = this;
+    this.el = document.querySelector('#state-1');
+    this.el.querySelector('.button').addEventListener('click', function() {
+      self.transitions['state-2']();
+    });
+  },
+  activate: function() {
+    this.el.style.display = 'block';
+  },
+  deactivate: function() {
+    this.el.style.display = 'none';
+  },
+};
+var S2Controller = {
+  init: function() {
+    var self = this;
+    this.el = document.querySelector('#state-2');
+    this.el.querySelector('.button').addEventListener('click', function() {
+      self.transitions['state-3']();
+    });
+  },
+  activate: function() {
+    this.el.style.display = 'block';
+  },
+  deactivate: function() {
+    this.el.style.display = 'none';
+  },
+};
+var S3Controller = {
+  init: function() {
+    var self = this;
+    this.el = document.querySelector('#state-3');
+    this.el.querySelector('.button').addEventListener('click', function() {
+      self.transitions['state-1']();
+    });
+  },
+  activate: function() {
+    this.el.style.display = 'block';
+  },
+  deactivate: function() {
+    this.el.style.display = 'none';
+  },
+};
+var sm = Wrlx.StateMachine.create(function (sm) {
+  sm.define_state('state-1', function (st) {
+    st.controller(S1Controller);
+    st.transitions_to('state-2', 'state-3');
+  });
+  sm.define_state('state-2', function (st) {
+    st.controller(S2Controller);
+    st.transitions_to('state-1', 'state-3');
+  });
+  sm.define_state('state-3', function (st) {
+    st.controller(S3Controller);
+    st.transitions_to('state-1');
+  });
+  sm.change('state-1');
+});
+
+window.onload = sm.start;
+```
