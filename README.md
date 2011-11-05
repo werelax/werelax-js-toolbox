@@ -81,7 +81,7 @@ If you work with javascript long enough, sooner or later you will need to genera
 
 The idea behind `Templates.js` comes from John Resig's micro-template engine. I just can't understand his implementation (Johnny is way beyond my league), so I did it my way.
 
-Using the library is very, very easy: `var the_compiled_template = Wrlx.Template("the template string");`. And then just call `the_compiled_tempalte` with the locals in a literal object. Writing the templates as javascript's strings is really akward, so I recommend you to write it inside a `<script type="text/template">` tag and use `Wrlx.Template.by_id('script-tag-id')`. A more detailed example:
+Using the library is very, very easy: `var the_compiled_template = Wrlx.Template("the template string");`. And then just call `the_compiled_template` with the locals in a literal object. Writing the templates as javascript's strings is really akward, so I recommend you to write it inside a `<script type="text/template">` tag and use `Wrlx.Template.by_id('script-tag-id')`. A more detailed example:
 
 First, add something like this to the HTML of the page (you can put it wherever you prefer):
 
@@ -222,4 +222,43 @@ var sm = Wrlx.StateMachine.create(function (sm) {
 });
 
 window.onload = sm.start;
+```
+
+### Elements.js
+
+I usually structure my javascript by 'widget', with a view object responsible or rendering some template and handling the DOM events, and I find it really annoying when half of the code is just for capturing DOM nodes inside the template. Is a repetitive, dull tasks that adds unneccesary noise. So here is `Elements.js` to help with that.
+
+The inspiration here comes from the fine library `Knockout.js`. It uses the HTML5 `data` attribute to bind elements and events to `ko.observables` and the resulting code is small and clean. But, as nice as it is, `Knockout.js` does a lot of other things that I don't always need. I also wanted to use a similar binding style but with a more traditional mvc-ish code. I wrote `Elements.js` tyring to keep it as simple (and short) as it can get, to distil the bare funtionality and peel off everything else. As a result, it's quite spartan but around 30 loc.
+
+Let's see a simple example (jQuery or a browser with `querySelector` support needed):
+
+In the HTML:
+
+```html
+<div id="container">
+  <label> Type something here: </label>
+  <input type="text" data-el="input.text"/>
+  <h5 data-el="header"></h5> 
+</div>
+```
+
+and in the js:
+
+```javascript
+var TestView = {
+  init: function () {
+    this.ui = Wrlx.Elements('#container')
+    this.bind_events();
+  },
+  bind_events: function () {
+    var self = this;
+    this.ui.input.text.addEventListener('keyup', function() {
+      self.ui.header.innerHTML = self.ui.input.text.value;
+    });
+  }
+}
+
+window.onload = function() {
+  TestView.init();
+};
 ```
