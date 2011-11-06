@@ -35,7 +35,7 @@
     var _super_ = this;
     var F = function () {};
     F.prototype = this.prototype;
-    var child = function () { _super_.apply(this) };
+    var child = function () { _super_.apply(this, arguments); };
     child.prototype = new F();
     child.prototype._super_ = _super_;
     child.prototype.super = function(name) {

@@ -301,3 +301,41 @@ window.onload = function() {
 ```
 
 How cool is that? Very little noise in the controller, just the code that matters. All this `data-*` thing is quite controversial. It is OK to specify the bindings in the HTML? Maybe is a violation of the view-controller decoupling. But, as far as I can tell, they are also coupled when you fill you controller with `var thing = $('.my-thing-selector')` and `$(thing).click(function() { ... })`. You can choose between two approaches: make the controller completely dependant on the CSS structure of the view by filling it with jQuery selectors/bindings, or make the view completely dependant on the controller method names by specifying the bindings in the `data-event` attribute. I find the second approach cleaner and better (relying on css selectos is hardly a good idea). That's my two cents.
+
+### Observable.js
+
+The PubSub pattern implemented as a module loadable with `Wrlx.Class` (in the instances, with `.include()` or in the class itself with `.extend()`). It's the easy, naive implementation, so nothing special here. I will write an usage example more as an illustration of the module system that the `Observable.js` itself.
+
+```javascript
+var Publisher = Wrlx.Class.create({
+  send_msg: function(msg) {
+    this.trigger('new-message', msg);
+  }
+});
+Publisher.include(Wrlx.Observable);
+
+var Subscriber = Wrlx.Class.create({
+  init: function (pub) {
+    var self = this;
+    this.name = Subscriber.getID();
+    pub.subscribe('new-message', function(msg) {
+      console.log(self.name + ': ' + msg)
+    })
+  }
+},{
+  _id: 0,
+  getID: function() {
+    return 'subscriber-' + this._id++;
+  }
+});
+
+window.onload = function() {
+  var pub = new Publisher();
+  for (var i=0; i < 10; i++) {
+    new Subscriber(pub);
+  }
+  pub.send_msg('Hi there!');
+}
+```
+
+As you can see, making things 'publishers' is as simple as including `Wrlx.Observable` after defining the class. Thats all it needs. From that point, you have `subscribe`, `unsubscribe` and `trigger` right in your instances. Very nice to my eyes.
