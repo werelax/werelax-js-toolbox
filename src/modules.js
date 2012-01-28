@@ -45,7 +45,7 @@
             return superfn.apply(this, args);
         }
     };
-    
+
     for (var key in this) if (this.hasOwnProperty(key)) {
         child[key] = this[key];
     }
@@ -58,7 +58,7 @@
     return child;
   };
   Module.prototype = {
-    proxy: function () {
+    proxy: function (fn) {
       var ctx = this;
       return function() {
         fn.apply(ctx, arguments);
@@ -67,5 +67,5 @@
   };
 
   exports['Class'] = Module;
-  
+
 })(this.Wrlx || (this.Wrlx = {}));
