@@ -29,8 +29,8 @@
       this.st = {}
     },
     _after_init: function () {
-      if (this.st.controller) {
-        this.st.controller.init();
+      if (this.st.controller && this.st.controller.init) {
+        this.st.controller.init(this.sm);
       }
     },
     activate: function (params) {
@@ -55,11 +55,23 @@
     }
   };
 
+  // CHANGELOG: Added async state planning
   function get_allowed_transitions(state, sm, transition_data) {
     var transitions = {};
     transition_data.forEach(function (state_id) {
-      transitions[state_id] = function (params) {
+      transitions[state_id] = function (params, cb) {
+        // Inmediate change
         sm.change(state_id, params);
+        if (cb != undefined && typeof(cb) == 'function') {
+          // Next, async state change changed planed on cb
+          cb(function(next_state_id, more_params) {
+            more_params || (more_params = {});
+            for (var prop in more_params) if (more_params.hasOwnProperty(prop)) {
+              params[prop] = more_params[prop];
+            }
+            sm.change(next_state_id, params);
+          });
+        }
       };
     });
     return transitions;

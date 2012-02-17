@@ -1,5 +1,5 @@
 (function (exports) {
-  
+
   function find(selector, base) {
     base || (base = document);
     if (typeof $ == 'undefined') {
@@ -31,13 +31,13 @@
       });
       if (typeof handler != 'function') {
         throw new Error('Events: ' + event_handler + ' is not a function');
-      } 
+      }
       return handler.apply(controller, args);
     });
   }
 
   var CaptureEvents = function (controller, selector) {
-    var root = find(selector)[0];
+    var root = (typeof selector == 'string') ? find(selector)[0] : selector;
     if (!root) { throw new Error('Events: ' + selector + ' doesn\'t exist'); }
     var captured_events = {};
     find('[data-event]', root).forEach(function (el) {

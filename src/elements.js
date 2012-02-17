@@ -1,5 +1,5 @@
 (function (exports) {
-  
+
   function find(selector, base) {
     base || (base = document);
     if (typeof $ == 'undefined') {
@@ -10,10 +10,11 @@
     }
   }
 
-  var CaptureElements = function (selector) {
-    var root = find(selector)[0];
+  var CaptureElements = function (selector, ctx) {
+    var root = (typeof selector == 'string') ? find(selector, ctx)[0] : selector;
     if (!root) { throw new Error('Elements: ' + selector + ' doesn\'t exist'); }
-    var captured_elements = {};
+    var captured_elements = {el: root};
+    var $ = (typeof jQuery == 'undefined') ? function(x){return x} : jQuery;
     find('[data-el]', root).forEach(function (el) {
       var el_namespace = el.getAttribute('data-el').split('.');
       var el_name = el_namespace.pop();
@@ -21,7 +22,7 @@
       el_namespace.forEach(function (name) {
         ns = ns[name] || (ns[name] = {});
       });
-      ns[el_name] = el;
+      ns[el_name] = $(el);
     });
     return captured_elements;
   };

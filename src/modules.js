@@ -38,7 +38,8 @@
     var child = function () { _super_.apply(this, arguments); };
     child.prototype = new F();
     child.prototype._super_ = _super_;
-    child.prototype.super = function(name) {
+    // because prototype.super makes yui/compressor cry
+    child.prototype['super'] = function(name) {
         var args = Array.prototype.splice.call(arguments, 1);
         var superfn = _super_.prototype[name];
         if (typeof superfn === 'function') {
